@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Militar - Army de Orange</title>
+    <style>
+        :root {
+            --bg-color: #0f1115;
+            --card-bg: #181b20;
+            --accent-orange: #ff6b00;
+            --accent-dark: #cc5500;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #2a2e35;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #000000 0%, #1e222d 100%);
+            border-bottom: 3px solid var(--accent-orange);
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        header h1 {
+            margin: 0;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 2rem;
+        }
+
+        header p {
+            margin-top: 5px;
+            color: var(--text-muted);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #14161d;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-muted);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        nav button:hover, nav button.active {
+            color: var(--accent-orange);
+            border-bottom: 3px solid var(--accent-orange);
+            background-color: rgba(255, 107, 0, 0.05);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--accent-orange);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .card h3 {
+            color: #ffffff;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .grid-item {
+            background: #20242c;
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--accent-orange);
+            font-weight: bold;
+        }
+
+        .rank-card {
+            border-left: 4px solid var(--accent-orange);
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #1d2128;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .rank-title {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+        }
+
+        .question-list {
+            list-style-type: square;
+            padding-left: 1.2rem;
+        }
+
+        .question-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .rule-item {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .punishment {
+            color: #ff9800;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .macro-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #111317;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.8rem;
+            gap: 1rem;
+        }
+
+        .macro-text {
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ffcc;
+            word-break: break-word;
+        }
+
+        .btn-copy {
+            background-color: var(--accent-orange);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-copy:hover {
+            background-color: var(--accent-dark);
+        }
+
+        .btn-copy.copied {
+            background-color: #4caf50;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📍 ARMY DE ORANGE</h1>
+        <p>Plataforma Oficial de Capacitación, Normativa y Protocolos Operativos</p>
+    </header>
+
+    <nav>
+        <button class="nav-btn active" onclick="openTab(event, 'ubicaciones')">Ubicaciones</button>
+        <button class="nav-btn" onclick="openTab(event, 'jerarquia')">Jerarquía</button>
+        <button class="nav-btn" onclick="openTab(event, 'ascensos')">Ascensos</button>
+        <button class="nav-btn" onclick="openTab(event, 'reglas')">Reglas</button>
+        <button class="nav-btn" onclick="openTab(event, 'rp')">Conocimiento RP</button>
+        <button class="nav-btn" onclick="openTab(event, 'macros')">Macros / Comandos</button>
+    </nav>
+
+    <div class="container">
+
+        <!-- UBICACIONES -->
+        <div id="ubicaciones" class="tab-content active">
+            <div class="card">
+                <h2>🛰️ UBICACIONES OFICIALES DE LA BASE</h2>
+                <p>A continuación se detallan las siglas y ubicaciones principales dentro de la base militar, de uso obligatorio para la correcta comunicación y coordinación operativa.</p>
+                <div class="grid-list">
+                    <div class="grid-item">🛰️ TC = Torre de Control</div>
+                    <div class="grid-item">🛡️ BR = Bunker</div>
+                    <div class="grid-item">🏥 HP = Hospital</div>
+                    <div class="grid-item">📡 D1 = Delta 1 (Ex Sur)</div>
+                    <div class="grid-item">📡 D2 = Delta 2 (Ex Norte)</div>
+                    <div class="grid-item">✈️ AP = Aeropuerto</div>
+                    <div class="grid-item">🏛️ SC = Sede Central</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JERARQUÍA -->
+        <div id="jerarquia" class="tab-content">
+            <div class="card">
+                <h2>🛡️ JERARQUÍA Y FUNCIONES 🛡️</h2>
+                
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Recluta (RCT):</div>
+                    Aprendizaje de la base, apoyo en eventos y vigilancia desde las torres Delta 1 y Delta 2 sin disparar.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Cabo (CBO):</div>
+                    Mismas funciones que el Recluta, pero prioriza la seguridad en Bunker y Torre del Hospital Militar.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Sargento (SGT):</div>
+                    Acceso a M4 y eventos. Puede prestar seguridad en Delta 2 y proporcionar información de reclutamiento. No realiza guardias sin permiso.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Sargento Primero (SGT 1°):</div>
+                    Mismas funciones que el Sargento, pero cuenta con acceso a chaleco. Debe enseñar a Cabos y Reclutas cómo interactuar con civiles en las entradas.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Sargento Mayor (SGM):</div>
+                    Lidera a los rangos más bajos, guía y aconseja al personal. Presta seguridad en Delta 1.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Teniente (TTE):</div>
+                    Casco duro. Protege Delta 1, entrena Reclutas y supervisa a los cascos suaves.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Capitán (CPT):</div>
+                    Mismas funciones que el Teniente, pero debe ayudar a sus rangos inferiores cuando lo soliciten.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Mayor (MAY):</div>
+                    Protección de Delta 1 o Delta 2. Supervisa y lidera a todos los cascos suaves, manteniendo el orden y reportando a sus superiores.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">🔰 Coronel (CRL):</div>
+                    Supervisa toda la operatividad de la base. Es un General en proceso y debe demostrar méritos para obtener el Traje Negro.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">⭐ Mayor General (MG):</div>
+                    General 1 estrella. Entrena a todos los rangos inferiores, guía a los Coroneles y supervisa toda la base reportándose a su superior.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">⭐⭐ Teniente General (TG):</div>
+                    General 2 estrellas. Puede generar blindados para cubrir Delta 1 y Delta 2, asegurándose de que todos cumplan correctamente sus labores.
+                </div>
+                <div class="rank-card">
+                    <div class="rank-title">⭐⭐⭐ Coronel General (CG):</div>
+                    General 3 estrellas. Máxima autoridad no designada. Su enfoque principal es dictar capacitaciones, fomentar el buen rol ante personas ajenas a la base y supervisar el correcto funcionamiento de toda la operatividad.
+                </div>
+
+                <p style="color: var(--accent-orange); font-weight: bold; margin-top: 15px;">
+                    🔔 Los rangos de General se obtienen únicamente por méritos y bajo evaluación del Alto Mando. No se solicitan.
+                </p>
+            </div>
+        </div>
+
+        <!-- ASCENSOS -->
+        <div id="ascensos" class="tab-content">
+            <div class="card">
+                <h2>📌 PREGUNTAS PARA ASCENSO — ARMY ORANGE</h2>
+                <p>A continuación se detallan las preguntas correspondientes para cada rango en su respectiva entrevista de ascenso.</p>
+                
+                <h3>🆕 Recluta → Cabo</h3>
+                <ul class="question-list">
+                    <li>¿Cuáles son las obligaciones de Cabo?</li>
+                    <li>¿Qué es RP13? y castigo</li>
+                    <li>¿Qué es RP14? y castigo</li>
+                    <li>¿Qué es RP1? y castigo</li>
+                    <li>¿Qué es RP5? y castigo</li>
+                    <li>¿Qué es CHAT5? y castigo</li>
+                    <li>Distinción de Uniforme y Rangos</li>
+                </ul>
+
+                <h3>🪖 Cabo → Sargento</h3>
+                <ul class="question-list">
+                    <li>¿Cuáles son las obligaciones de Sargento?</li>
+                    <li>¿Cuáles son las 5 reglas básicas de la base?</li>
+                    <li>¿Cuáles son las 4 reglas del evento “Robo de Material”?</li>
+                    <li>¿Qué es RP15? y castigo</li>
+                    <li>¿Qué es CHAT8? y castigo</li>
+                    <li>¿Qué es CHAT17? y castigo</li>
+                    <li>Ejercicio Distributivo (ZONAS DE BASE)</li>
+                </ul>
+
+                <h3>🎯 Sargento → Sargento Primero</h3>
+                <ul class="question-list">
+                    <li>¿Cuáles son las obligaciones de Sargento Primero?</li>
+                    <li>¿Cuáles son las 10 reglas del ejército? y castigos</li>
+                    <li>Ejercicio Practico (BLOQUEO DE VEHICULOS)</li>
+                </ul>
+
+                <h3>🎖️ Sargento Primero → Sargento Mayor</h3>
+                <ul class="question-list">
+                    <li>¿Cuáles son las obligaciones de Sargento Mayor</li>
+                    <li>ABUSE 2 y castigo</li>
+                    <li>CLAN5.1 y castigo</li>
+                    <li>Evaluación Logistica (PROCEDIMIENTOS PUERTAS)</li>
+                </ul>
+
+                <h3>🏅 Sargento Mayor → Teniente</h3>
+                <ul class="question-list">
+                    <li>¿Cuáles son las obligaciones de Teniente</li>
+                    <li>ABUSE 4 y castigo</li>
+                    <li>ABUSE 5 y castigo</li>
+                    <li>CLAN6 y Castigo</li>
+                    <li>Ejercicio Operativo</li>
+                </ul>
+
+                <h3>🪖 Teniente → Capitán</h3>
+                <ul class="question-list">
+                    <li>¿Cuáles son las obligaciones de Capitan</li>
+                    <li>Ejercicio Operativo</li>
+                    <li>¿Qué es RP3? y castigo</li>
+                    <li>¿Qué es RP4? y castigo</li>
+                    <li>¿Qué es RP8? y castigo</li>
+                    <li>¿Qué es RP11? y castigo</li>
+                    <li>Prueba de Autoridad (3 Eventos)</li>
+                </ul>
+
+                <p style="background: rgba(255,0,0,0.1); border-left: 4px solid red; padding: 10px; margin-top: 20px;">
+                    <strong>⚠️ IMPORTANTE:</strong> Los ascensos de rangos superiores serán evaluados y decididos exclusivamente por los líderes de la facción.
+                </p>
+            </div>
+        </div>
+
+        <!-- REGLAS -->
+        <div id="reglas" class="tab-content">
+            <div class="card">
+                <h2>📌 5 REGLAS BÁSICAS DE LA BASE</h2>
+                <div class="rule-item"><strong>🗣️ #1 Prohibido permanecer AFK dentro de la base.</strong> Si vas a ausentarte, deberás cerrar sesión correctamente.</div>
+                <div class="rule-item"><strong>🗣️ #2 Prohibido conducir vehículos militares sin autorización.</strong> Solo un General o superior podrá autorizar el uso de vehículos de la base.</div>
+                <div class="rule-item"><strong>🗣️ #3 Prohibido salir de la base sin permiso.</strong> Toda salida deberá ser autorizada y supervisada por altos mandos.</div>
+                <div class="rule-item"><strong>🗣️ #4 Respeto y disciplina obligatoria.</strong> Todos los soldados deberán respetar a superiores y compañeros en todo momento.</div>
+                <div class="rule-item"><strong>🗣️ #5 Uso responsable del armamento.</strong> Queda prohibido utilizar armas o Taser de manera indebida, innecesaria o jugando dentro de la base.</div>
+            </div>
+
+            <div class="card">
+                <h2>📌 REGLAS — EJÉRCITO (ONESTATE)</h2>
+                <p>¡Hola, miembros de la Facción del Ejército! Aquí están las reglas y los castigos para los soldados. Por favor, léanlos atentamente y recuerden siempre que ser soldado requiere paciencia y conocimiento del juego de rol.</p>
+                
+                <div class="rule-item">
+                    <strong>1. Actitud irrespetuosa hacia compañeros y civiles.</strong><br>
+                    <span class="punishment">🔸 Castigo: Reprimenda o destitución del soldado (por decisión del líder).</span>
+                </div>
+                <div class="rule-item">
+                    <strong>2. Deben dirigirse a los superiores con "Señor"/ "Señora".</strong><br>
+                    <span class="punishment">🔸 Castigo: 1 alerta / advertencia.</span>
+                </div>
+                <div class="rule-item">
+                    <strong>3. Se prohíbe cualquier tipo de corrupción.</strong> Solicitar o aceptar sobornos (dinero, bienes o servicios) de miembros de la Facción del Ejército, policías o jugadores a cambio de bienes, dinero o servicios.<br>
+                    <span class="punishment">🔸 Castigo: Destitución inmediata del soldado.</span>
+                </div>
+                <div class="rule-item">
+                    <strong>4. Usar armas de fuego, fuerza física o equipo especial sin previo aviso.</strong> Una razón significativa incluye: Amenaza a la vida y la salud de un soldado o de los ciudadanos de la zona; Entrada no autorizada al territorio de una base militar.<br>
+                    <span class="punishment">🔸 Castigo: 1 reprimenda o despido del soldado (por decisión del líder).</span>
+                </div>
+                <div class="rule-item">
+                    <strong>5. Los soldados no pueden utilizar un vehículo especial "Carrier" sin permiso de los generales, subalternos o del jefe.</strong><br>
+                    <span class="punishment">🔸 Castigo: 1 advertencia.</span>
+                </div>
+                <div class="rule-item">
+                    <strong>6. Incumplimiento de la subordinación/no acatar las órdenes de los generales, subalternos o del jefe.</strong><br>
+                    <span class="punishment">🔸 Castigo: 1 reprimenda o despido del empleado (por decisión del líder).</span>
+                </div>
+                <div class="rule-item">
+                    <strong>7. Uso de vehículos de la empresa para fines personales.</strong><br>
+                    <span class="punishment">🔸 Castigo: 1 reprimenda o despido del empleado (por decisión del líder).</span>
+                </div>
+                <div class="rule-item">
+                    <strong>8. Incumplimiento de las normas del servidor.</strong><br>
+                    <span class="punishment">🔸 Castigo: 1 reprimenda o despido del empleado (por decisión del líder).</span>
+                </div>
+                <div class="rule-item">
+                    <strong>9. Salir de la Base Militar uniformado o con arma.</strong> Solo se puede salir de la base con permiso de los generales, subalternos o del líder.<br>
+                    <span class="punishment">🔸 Castigo: 1 reprimenda.</span>
+                </div>
+                <div class="rule-item">
+                    <strong>10. Sistema disciplinario interno:</strong><br>
+                    <span class="punishment">🔸 2 advertencias = 1 reprimenda | 3 reprimendas/amonestaciones = Destitución del soldado.</span>
+                </div>
+                
+                <p style="color: #4caf50; font-weight: bold; margin-top: 15px;">
+                    🫡 Leer y conocer esta información es requisito obligatorio para cualquier ascenso dentro del Ejército.
+                </p>
+            </div>
+        </div>
+
+        <!-- CONOCIMIENTO RP -->
+        <div id="rp" class="tab-content">
+            <div class="card">
+                <h2>🧠 RP - CONOCIMIENTO OBLIGATORIO</h2>
+                <p>🍊 Dentro del Army de Orange, existen reglas fundamentales conocidas como RPs, las cuales son de conocimiento obligatorio para todos los miembros. Son consideradas las más importantes dentro del rol militar y su incumplimiento puede generar sanciones graves.</p>
+                
+                <div class="rule-item">
+                    <strong>🎖️ RP1:</strong> Infligir daño o matar al personaje de otro JUGADOR sin motivo RP.<br>
+                    <span class="punishment">Castigo: 20 minutos de cárcel y Reprimenda</span>
+                </div>
+                <div class="rule-item">
+                    <strong>🎖️ RP3:</strong> Exceder las capacidades físicas del personaje RP.<br>
+                    <span class="punishment">Castigo: 10 minutos de cárcel y advertencia</span>
+                </div>
+                <div class="rule-item">
+                    <strong>🎖️ RP4:</strong> Violación de la lógica de acción del personaje RP y creación de situaciones poco realistas.<br>
+                    <span class="punishment">Castigo: 15 minutos de cárcel y advertencia</span>
+                </div>
+                <div class="rule-item">
+                    <strong>🎖️ RP5:</strong> Usar información del mundo real en RP.<br>
+                    <span class="punishment">Castigo: De 30 minutos de silencio a 60 minutos de cárcel y advertencia</span>
+                </div>
+                <div class="rule-item">
+                    <strong>🎖️ RP8:</strong> AFK. Falta de actividad en el juego por parte del JUGADOR durante más de 5 minutos.<br>
+                    <span class="punishment">Castigo: Desconexión del servidor.</span>
+                </div>
+                <div class="rule-item">
+                    <strong>🎖️ RP11:</strong> Atacar a otros jugadores en zonas verdes o zonas de trabajo y vehículos de trabajo como hospitales o mercados de vehículos.<br>
+                    <span class="punishment">Castigo: De 30 a 60 minutos de cárcel y reprimenda</span>
+                </div>
+                <p style="font-style: italic; color: var(--text-muted);">(Esto es guía de estudio)</p>
+            </div>
+        </div>
+
+        <!-- MACROS Y COMANDOS -->
+        <div id="macros" class="tab-content">
+            <div class="card">
+                <h2>⌨️ MACROS Y COMANDOS RÁPIDOS</h2>
+                <p>Haz clic en el botón <strong>Copiar</strong> para guardar rápidamente cualquier macro en tu portapapeles.</p>
+
+                <div id="macros-container"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>🫡 Ejército Estatal De Orange — Documentación Interna Operativa</p>
+    </footer>
+
+    <script>
+        const macrosList = [
+            "/me PRESENTA SU MÁXIMO RESPETO AL SR/SRA [RANGO] [NOMBRE COMPLETO], REPORTÁNDOSE FORMALMENTE.",
+            "/do ¡Taser! ¡Taser! Descarga eléctrica aplicada al individuo para su inmovilización y control de la situación.",
+            "/do ¡Fuego! Se responde en defensa propia o de personas en riesgo cercano.",
+            "/flobby 10-4 (Copiado, orden recibida)",
+            "/me Recuerde: acceso no autorizado, armas visibles o alterar el orden infringe normas. Podrá ser neutralizado si persiste. Retírese ahora.",
+            "/me Señor/a, habla [RANGO ACTUAL] [NOMBRE COMPLETO]del Ejército Estatal De Orange. Zona restringida. Guarde sus armas y mantenga distancia de la entrada. ¿En qué puedo asistirle?",
+            "/me Ha sido identificado como posible miembro de pandilla. Mantenga las manos visibles y evite movimientos bruscos. Será sometido a verificación.",
+            "/me Zona restringida. Si no posee autorización, retírese de inmediato o será intervenido. (Advertencia 1)",
+            "/me Mantenga distancia de la entrada y manos visibles. El incumplimiento será considerado una amenaza. (Advertencia 2)",
+            "/me Última advertencia. Zona militar restringida. Cualquier incumplimiento será neutralizado. (Advertencia 3)",
+            "/flobby 10-8 [RANGO] [NOMBRE COMPLETO] en servicio.",
+            "/flobby 10-7 [RANGO] [NOMBRE COMPLETO] fuera de servicio.",
+            "/me No posee autorización. Dispone de 5 segundos para retirarse del área. Última orden.",
+            "/me 5...",
+            "/me 4...",
+            "/me 3...",
+            "/me 2...",
+            "/me 1...",
+            "/me 0. Amenaza confirmada, abran fuego.",
+            "/me Requisitos de ingreso: nivel 6, +18, dominio del español, sin infracciones ni afiliaciones ilegales, ni pertenecer a facción, micrófono funcional y nombre RP debe coincidir con Discord. Ser Poseedor De Certificado De comunicación (Obligatorio) Horarios: [ 16:30 - 23:00 ]",
+            "/flobby Solicito Código Verde para gestión de vehículo de misión diaria.",
+            "/flobby Solicito Código Verde para gestión de patrullaje diario.",
+            "/do Control de identidad en curso. Presente documentación válida de inmediato.",
+            "/flobby 10-34 Delta 1. Perímetro asegurado, sin presencia de intrusos.",
+            "/flobby 10-34 Delta 2. Perímetro asegurado, sin presencia de intrusos.",
+            "/flobby 10-34 Caja roja. Perímetro asegurado, sin presencia de intrusos.",
+            "/flobby 10-34 Rampa de AP. Perímetro asegurado, sin presencia de intrusos",
+            "/flobby 10-27 Proceso a cambio de frecuencia de radio (guardia)",
+            "/flobby 10-53 via a delta 2. CERRADA",
+            "/flobby 10-53 via a delta 1. CERRADA",
+            "/flobby 10-65 Esperando instrucciones/Órdenes",
+            "/flobby 10-52 Llamando a algún superior activo a mi posición",
+            "/flobby 10-33 EMERGENCIA SOLICITO REFUERZOS EN MI POSICIÓN!!! (CODIGO NARANJA)",
+            "/flobby 10-67 EMERGENCIA TODO EL PERSONAL ACTIVO VENIR A MI POSICIÓN!!! (CODIGO ROJO)",
+            "/flobby 00-4 Todo despejado!!! (CODIGO VERDE)",
+            "/flobby (FDB)",
+            "/flobby (RAB)",
+            "/flobby Código Gris. Fuera de servicio, de vacaciones.",
+            "/me ¡¡EJÉRCITO EN EL TOP!!"
+        ];
+
+        const container = document.getElementById('macros-container');
+        macrosList.forEach((text) => {
+            const item = document.createElement('div');
+            item.className = 'macro-item';
+            
+            const textSpan = document.createElement('span');
+            textSpan.className = 'macro-text';
+            textSpan.textContent = text;
+            
+            const btn = document.createElement('button');
+            btn.className = 'btn-copy';
+            btn.textContent = 'Copiar';
+            btn.onclick = () => copyToClipboard(text, btn);
+
+            item.appendChild(textSpan);
+            item.appendChild(btn);
+            container.appendChild(item);
+        });
+
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '¡Copiado!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = 'Copiar';
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+
+        function openTab(evt, tabName) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+
+            const buttons = document.getElementsByClassName("nav-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
